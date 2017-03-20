@@ -26,8 +26,8 @@ import java.util.Locale;
 public class MainActivity extends Activity {
 
     private RequestContext requestContext;
-    private static final String PRODUCT_ID = "amzn1.devportal.mobileapp.f719690e26374f6bba3f001f65d8165d";
-    private static final String PRODUCT_DSN = "INSERT UNIQUE DSN FOR YOUR DEVICE";
+    //private static final String PRODUCT_ID = "amzn1.devportal.mobileapp.f719690e26374f6bba3f001f65d8165d";
+    //private static final String PRODUCT_DSN = "INSERT UNIQUE DSN FOR YOUR DEVICE";
 
 
     @Override
@@ -41,7 +41,7 @@ public class MainActivity extends Activity {
             /* Authorization was completed successfully. */
             @Override
             public void onSuccess(AuthorizeResult result) {
-            /* Your app is now authorized for the requested scopes */
+                fetchUserProfile();
             }
 
             /* There was an error during the attempt to authorize the
@@ -64,33 +64,12 @@ public class MainActivity extends Activity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final JSONObject scopeData = new JSONObject();
-                final JSONObject productInstanceAttributes = new JSONObject();
-
-                try {
-                    productInstanceAttributes.put("deviceSerialNumber", PRODUCT_DSN);
-                    scopeData.put("productInstanceAttributes", productInstanceAttributes);
-                    scopeData.put("productID", PRODUCT_ID);
-
-                    AuthorizationManager.authorize(new AuthorizeRequest.Builder(requestContext)
-                            .addScope(ScopeFactory.scopeNamed("alexa:all", scopeData))
-                            .forGrantType(AuthorizeRequest.GrantType.ACCESS_TOKEN)
-                            .shouldReturnUserData(false)
-                            .build());
-                } catch (JSONException e) {
-                    // handle exception here
-                }
-            }
-        });
-        /*loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
                 AuthorizationManager.authorize(new AuthorizeRequest
                         .Builder(requestContext)
                         .addScopes(ProfileScope.profile(), ProfileScope.postalCode())
                         .build());
             }
-        });*/
+        });
     }
 
     @Override
